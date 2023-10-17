@@ -15,6 +15,7 @@ async function getAllBooks() {
 			author: true,
 			description: true,
 			documentURL: true,
+			coverImageURL: true,
 			owner: {
 				select: {
 					oAuthID: true,

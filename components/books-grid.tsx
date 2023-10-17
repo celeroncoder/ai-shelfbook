@@ -87,29 +87,25 @@ export function BooksGrid({
 
 							return (
 								<Link href={`/book/${book.id}`}>
-									<Card
+									<div
 										key={book.id}
-										className="hover:shadow-md hover:scale-105 cursor-pointer duration-300 w-96"
+										className="hover:scale-105 duration-300 shadow-lg px-4 py-2 rounded-xl border flex flex-col items-center justify-between gap-2 w-96 h-96"
 									>
-										<CardHeader>
-											<CardTitle>{book.title}</CardTitle>
-											<CardDescription>by {book.author}</CardDescription>
-										</CardHeader>
-										<CardContent>
-											<p className="text-muted-foreground text-sm">
-												{book.description}
+										<img
+											className="h-64 rounded-lg"
+											src={book.coverImageURL || "/mock-book-cover.jpg"}
+										/>
+
+										<h1 className="text-lg font-semibold">{book.title}</h1>
+										<p className="text-muted-foreground">
+											{book.description.slice(0, 35)}...
+										</p>
+										<div className="flex items-center justify-end w-full">
+											<p className="text-sm bg-foreground text-background px-1 rounded">
+												{book.owner.oAuthID == user.id ? "Owner" : ""}
 											</p>
-										</CardContent>
-										{user && (
-											<CardFooter>
-												<div className="flex items-center justify-end w-full">
-													<p className="text-sm text-muted-foreground">
-														{isOwner && "Owner"}
-													</p>
-												</div>
-											</CardFooter>
-										)}
-									</Card>
+										</div>
+									</div>
 								</Link>
 							);
 						})}

@@ -1,3 +1,4 @@
+import { DeleteBook } from "@/components/delete-book";
 import { DownloadFile } from "@/components/download-file";
 import { Navbar } from "@/components/navbar";
 import { UploadCover } from "@/components/upload-cover";
@@ -59,6 +60,8 @@ export default async function BookDetailsPage({ params }: PageProps) {
 						</h1>
 					)
 				)}
+
+				{book.owner.oAuthID === user.id && <DeleteBook book={book} />}
 			</section>
 		</main>
 	);

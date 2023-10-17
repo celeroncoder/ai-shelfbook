@@ -2,6 +2,7 @@
 
 import {
 	createBook,
+	deleteBook,
 	generateImageUploadURL,
 	generateUploadURL,
 	updateBook,
@@ -49,4 +50,8 @@ export const increaseDownloadCountForUser = async (userId: string) => {
 
 export const decreaseDownloadCountForUser = async (oAuthID: string) => {
 	return await decreaseDownloadCount(oAuthID);
+};
+
+export const deleteBookAction = async (id: string) => {
+	return await deleteBook(id);
 };

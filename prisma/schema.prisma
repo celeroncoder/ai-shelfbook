@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id String @id @default(cuid())
+
+  oAuthID String
+
+  books Book[]
+}
+
+model Book {
+  id String @id @default(cuid())
+
+  title       String
+  author      String
+  description String
+
+  documentURL String
+
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String
+}

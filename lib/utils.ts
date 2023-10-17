@@ -19,3 +19,7 @@ export async function getKindeSession() {
 		organization: KindeOrganization;
 	};
 }
+
+export function getExtension(fname: string) {
+	return fname.slice((Math.max(0, fname.lastIndexOf(".")) || Infinity) + 1);
+}

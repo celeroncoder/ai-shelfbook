@@ -1,5 +1,6 @@
 import { DownloadFile } from "@/components/download-file";
 import { Navbar } from "@/components/navbar";
+import { UploadCover } from "@/components/upload-cover";
 import { UploadFile } from "@/components/upload-file";
 import { getBookById } from "@/service/book";
 import { getUserByOAuthID } from "@/service/user";
@@ -28,6 +29,16 @@ export default async function BookDetailsPage({ params }: PageProps) {
 		<main>
 			<Navbar isAuthenticated={isAuthenticated()} user={user} />
 			<section className="px-10 py-5 flex flex-col items-center justify-center gap-5">
+				{book.coverImageURL ? (
+					<div>
+						<img className="w-56 h-72 rounded-lg" src={book?.coverImageURL!} />
+					</div>
+				) : (
+					book.owner.oAuthID === user.id && (
+						<UploadCover book={book} user={user} />
+					)
+				)}
+
 				<div className="flex flex-col items-center justify-center gap-2">
 					<h1 className="text-2xl font-bold text-center	">{book?.title}</h1>
 					<p>by {book?.author}</p>

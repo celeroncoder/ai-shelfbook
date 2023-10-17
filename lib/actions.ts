@@ -1,6 +1,11 @@
 "use server";
 
-import { createBook, generateUploadURL, updateBook } from "@/service/book";
+import {
+	createBook,
+	generateImageUploadURL,
+	generateUploadURL,
+	updateBook,
+} from "@/service/book";
 import { decreaseDownloadCount, increaseDownloadCount } from "@/service/user";
 
 export const createBookAction = (data: {
@@ -20,6 +25,10 @@ export const getSecureURL = async () => {
 	return await generateUploadURL();
 };
 
+export const getSecureImageURL = async (fileExt: string) => {
+	return await generateImageUploadURL(fileExt);
+};
+
 export const updateBookAction = async (
 	id: string,
 	data: {
@@ -28,6 +37,7 @@ export const updateBookAction = async (
 		author: string;
 		ownerId: string;
 		documentURL: string;
+		coverImageURL: string;
 	}
 ) => {
 	return await updateBook(id, data);

@@ -25,6 +25,8 @@ model Book {
 
   documentURL String
 
+  coverImageURL String?
+
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String
 }

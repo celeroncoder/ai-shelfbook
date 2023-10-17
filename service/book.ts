@@ -33,6 +33,7 @@ async function getBookById(id: string) {
 			author: true,
 			description: true,
 			documentURL: true,
+			coverImageURL: true,
 			owner: {
 				select: {
 					oAuthID: true,
@@ -79,12 +80,14 @@ async function updateBook(
 		ownerId,
 		description,
 		documentURL,
+		coverImageURL,
 	}: {
 		title: string;
 		author: string;
 		ownerId: string;
 		description: string;
 		documentURL: string;
+		coverImageURL: string;
 	}
 ) {
 	return await prisma.book.update({
@@ -95,6 +98,7 @@ async function updateBook(
 			ownerId,
 			description,
 			documentURL,
+			coverImageURL,
 		},
 	});
 }
@@ -106,6 +110,22 @@ async function deleteBook(id: string) {
 async function generateUploadURL() {
 	const rawBytes = await randomBytes(16);
 	const imageName = `book-${rawBytes.toString("hex")}.pdf`;
+
+	const params = {
+		Bucket: bucketName,
+		Key: imageName,
+		// Expires: 60,
+	};
+
+	const command = new PutObjectCommand(params);
+	const uploadURL = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+	return { imageName, uploadURL };
+}
+
+async function generateImageUploadURL(fileExt: string) {
+	const rawBytes = await randomBytes(16);
+	const imageName = `bookCover-${rawBytes.toString("hex")}.${fileExt}`;
 
 	const params = {
 		Bucket: bucketName,
@@ -137,4 +157,5 @@ export {
 	deleteBook,
 	generateUploadURL,
 	deleteObjects,
+	generateImageUploadURL,
 };

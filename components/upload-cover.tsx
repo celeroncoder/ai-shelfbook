@@ -1,18 +1,15 @@
 "use client";
 
-import {
-	getSecureURL,
-	increaseDownloadCountForUser,
-	updateBookAction,
-} from "@/lib/actions";
-import { Input } from "./ui/input";
 import { getBookById } from "@/service/book";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
-import { FormEventHandler, useState } from "react";
+import { useState } from "react";
+import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { UploadCloud } from "lucide-react";
+import { getSecureImageURL, updateBookAction } from "@/lib/actions";
+import { getExtension } from "@/lib/utils";
 
-export function UploadFile({
+export function UploadCover({
 	book,
 	user,
 }: {
@@ -24,19 +21,13 @@ export function UploadFile({
 	const [files, setFiles] = useState<FileList | null>(null);
 
 	const handleUpload = async (files: FileList | null) => {
-		console.log("handleUpload");
-
 		if (files === null) return;
 
 		const file = files[0];
 
-		console.log(file);
-
-		const { uploadURL } = await getSecureURL();
+		const { uploadURL } = await getSecureImageURL(getExtension(file.name));
 
 		if (!uploadURL) return;
-
-		console.log(uploadURL);
 
 		// putting the object
 		const res = await fetch(uploadURL, {
@@ -59,15 +50,14 @@ export function UploadFile({
 			(await updateBookAction(book.id, {
 				...book,
 				ownerId: book.owner.id,
-				documentURL: uploadURL.split("?")[0],
-				coverImageURL: book.coverImageURL || "",
-			})) &&
-			(await increaseDownloadCountForUser(book.owner.id));
+				documentURL: book.documentURL,
+				coverImageURL: uploadURL.split("?")[0],
+			}));
 
 		window.location.reload();
 	};
 
-	const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 
 		if (files === null) return;
@@ -80,13 +70,11 @@ export function UploadFile({
 			onSubmit={onSubmit}
 			className="text-center min-w-fit w-full lg:w-1/4 md:w-1/2"
 		>
-			<h1 className="text-xl font-semibold my-4">
-				Upload a PDF File for the readers to read the book...
-			</h1>
+			<h1 className="text-xl font-semibold my-4">Upload Cover</h1>
 			<div className="flex items-center justify-center gap-4">
 				<Input
 					type="file"
-					accept=".pdf"
+					accept="image/*"
 					onChange={(e) => setFiles(e.target.files)}
 				/>
 

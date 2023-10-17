@@ -1,11 +1,9 @@
+import { DownloadFile } from "@/components/download-file";
 import { Navbar } from "@/components/navbar";
-import { Input } from "@/components/ui/input";
 import { UploadFile } from "@/components/upload-file";
-import { getSecureURL, updateBookAction } from "@/lib/actions";
 import { getBookById } from "@/service/book";
-import { getUserById, getUserByOAuthID } from "@/service/user";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { redirect, useParams } from "next/navigation";
+import { redirect } from "next/navigation";
 
 type PageProps = {
 	params: {
@@ -21,8 +19,6 @@ export default async function BookDetailsPage({ params }: PageProps) {
 
 	const book = await getBookById(id);
 
-	console.log(book);
-
 	if (!book) redirect("/");
 
 	return (
@@ -37,6 +33,17 @@ export default async function BookDetailsPage({ params }: PageProps) {
 
 				{book.owner.oAuthID === user.id && book.documentURL.length <= 0 && (
 					<UploadFile book={book} user={user} />
+				)}
+
+				{book.documentURL.length > 0 ? (
+					<DownloadFile book={book} />
+				) : (
+					book.owner.oAuthID !== user.id && (
+						<h1>
+							The User hasn't upload the book pdf yet. Please wait or try again
+							later...
+						</h1>
+					)
 				)}
 			</section>
 		</main>

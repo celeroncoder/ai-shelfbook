@@ -2,6 +2,7 @@ import { DownloadFile } from "@/components/download-file";
 import { Navbar } from "@/components/navbar";
 import { UploadFile } from "@/components/upload-file";
 import { getBookById } from "@/service/book";
+import { getUserByOAuthID } from "@/service/user";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -21,6 +22,8 @@ export default async function BookDetailsPage({ params }: PageProps) {
 
 	if (!book) redirect("/");
 
+	const dbUser = await getUserByOAuthID(user.id!);
+
 	return (
 		<main>
 			<Navbar isAuthenticated={isAuthenticated()} user={user} />
@@ -36,7 +39,7 @@ export default async function BookDetailsPage({ params }: PageProps) {
 				)}
 
 				{book.documentURL.length > 0 ? (
-					<DownloadFile book={book} />
+					<DownloadFile book={book} user={user} dbUser={dbUser} />
 				) : (
 					book.owner.oAuthID !== user.id && (
 						<h1>

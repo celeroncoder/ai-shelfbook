@@ -1,6 +1,10 @@
 "use client";
 
-import { getSecureURL, updateBookAction } from "@/lib/actions";
+import {
+	getSecureURL,
+	increaseDownloadCountForUser,
+	updateBookAction,
+} from "@/lib/actions";
 import { Input } from "./ui/input";
 import { getBookById } from "@/service/book";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
@@ -57,7 +61,10 @@ export function UploadFile({
 				...book,
 				ownerId: book.owner.id,
 				documentURL: uploadURL.split("?")[0],
-			}));
+			})) &&
+			(await increaseDownloadCountForUser(book.owner.id));
+
+		window.location.reload();
 	};
 
 	const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {

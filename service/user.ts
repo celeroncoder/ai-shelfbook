@@ -18,4 +18,33 @@ async function deleteUser(id: string) {
 	return await prisma.user.delete({ where: { id } });
 }
 
-export { getUserById, createUser, deleteUser, getUserByOAuthID };
+async function increaseDownloadCount(id: string) {
+	return await prisma.user.update({
+		where: { id },
+		data: {
+			downloadCount: {
+				increment: 4,
+			},
+		},
+	});
+}
+
+async function decreaseDownloadCount(oAuthID: string) {
+	return await prisma.user.update({
+		where: { oAuthID },
+		data: {
+			downloadCount: {
+				decrement: 1,
+			},
+		},
+	});
+}
+
+export {
+	getUserById,
+	createUser,
+	deleteUser,
+	getUserByOAuthID,
+	increaseDownloadCount,
+	decreaseDownloadCount,
+};

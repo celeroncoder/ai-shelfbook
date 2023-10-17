@@ -4,14 +4,20 @@ import { Button } from "./ui/button";
 import { KindeUser, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Suspense } from "react";
 import Link from "next/link";
+import { getUserByOAuthID } from "@/service/user";
+import { DownloadsLeft } from "./downloads-left";
 
-export function Navbar({
+export async function Navbar({
 	isAuthenticated,
 	user,
 }: {
 	isAuthenticated: boolean;
 	user?: KindeUser;
 }) {
+	const dbUser = await getUserByOAuthID(user?.id!);
+
+	if (!dbUser) return null;
+
 	return (
 		<Suspense>
 			<header className="py-4 px-6 border-b-2 border-b-slate-200 flex items-center justify-between">
@@ -36,6 +42,9 @@ export function Navbar({
 							</p>
 						</Button>
 					)}
+
+					<DownloadsLeft downloadCount={dbUser.downloadCount} />
+
 					{!isAuthenticated ? (
 						<a href="/login">
 							<Button className="flex items-center gap-2">

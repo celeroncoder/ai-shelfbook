@@ -10,7 +10,8 @@ datasource db {
 model User {
   id String @id @default(cuid())
 
-  oAuthID String
+  oAuthID       String @unique
+  downloadCount Int    @default(4)
 
   books Book[]
 }

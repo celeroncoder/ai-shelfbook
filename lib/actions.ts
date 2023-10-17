@@ -1,6 +1,7 @@
 "use server";
 
 import { createBook, generateUploadURL, updateBook } from "@/service/book";
+import { decreaseDownloadCount, increaseDownloadCount } from "@/service/user";
 
 export const createBookAction = (data: {
 	title: string;
@@ -30,4 +31,12 @@ export const updateBookAction = async (
 	}
 ) => {
 	return await updateBook(id, data);
+};
+
+export const increaseDownloadCountForUser = async (userId: string) => {
+	return await increaseDownloadCount(userId);
+};
+
+export const decreaseDownloadCountForUser = async (oAuthID: string) => {
+	return await decreaseDownloadCount(oAuthID);
 };

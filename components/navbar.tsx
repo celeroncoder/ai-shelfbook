@@ -27,7 +27,7 @@ export async function Navbar({
 				>
 					<BookOpen className="w-6 h-6" />
 					<h1 className="font-bold text-xl select-none whitespace-nowrap">
-						AI ShelfBook
+						ShelfBook
 					</h1>
 				</Link>
 				<div className="flex gap-2 items-center">

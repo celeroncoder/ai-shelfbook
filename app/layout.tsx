@@ -12,8 +12,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-	title: "AI Shelfbook",
-	description: "AI Shelfbook",
+	title: "Shelfbook",
+	description: "Shelfbook",
 };
 
 export default function RootLayout({
